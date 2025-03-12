@@ -55,7 +55,7 @@
 
 FROM oven/bun:1 AS deps
 WORKDIR /usr/src/app
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml\* ./
+COPY package.json bun.lock* ./
 
 RUN bun install
 
@@ -63,7 +63,7 @@ FROM oven/bun:1 AS builder
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
-RUN bun run build
+RUN SKIP_ENV_VALIDATION=1 bun run build
 
 FROM oven/bun:1 AS runner
 WORKDIR /usr/src/app
