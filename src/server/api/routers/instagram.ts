@@ -11,10 +11,11 @@ export const instagramRouter = createTRPCRouter({
   getProfile: publicProcedure
     .input(z.object({ username: z.string().min(1) }))
     .mutation(async ({ input }) => {
+      const browser = await playwright.chromium.launch(
+        PlaywrightLaunchOptionsConfig,
+      );
+
       try {
-        const browser = await playwright.chromium.launch(
-          PlaywrightLaunchOptionsConfig,
-        );
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto(`https://www.instagram.com/${input.username}`);
@@ -30,6 +31,7 @@ export const instagramRouter = createTRPCRouter({
 
         return response;
       } catch (error) {
+        await browser.close();
         throw error;
       }
     }),
