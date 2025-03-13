@@ -20,10 +20,11 @@ export const instagramRouter = createTRPCRouter({
         await page.goto(`https://www.instagram.com/${input.username}`);
 
         const responseRaw = await page.waitForResponse((response) => {
+          console.log(response.url());
           return response.url().includes("web_profile_info");
         });
         const response = (await responseRaw.json()) as InstagramResponse;
-        
+
         await page.close();
         await browser.close();
 
