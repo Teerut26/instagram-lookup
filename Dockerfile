@@ -66,6 +66,7 @@ COPY . .
 RUN SKIP_ENV_VALIDATION=1 bun run build
 
 FROM oven/bun:1 AS runner
+RUN apt-get update
 RUN apt-get install -y fonts-freefont-ttf chromium
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/next.config.js ./
